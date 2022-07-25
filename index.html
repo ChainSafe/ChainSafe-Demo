@@ -59,9 +59,9 @@
       var buildUrl = "Build";
       var loaderUrl = buildUrl + "/ChainsafeDemoBuild.loader.js";
       var config = {
-        dataUrl: buildUrl + "/ChainsafeDemoBuild.data.unityweb",
-        frameworkUrl: buildUrl + "/ChainsafeDemoBuild.framework.js.unityweb",
-        codeUrl: buildUrl + "/ChainsafeDemoBuild.wasm.unityweb",
+        dataUrl: buildUrl + "/ChainsafeDemoBuild.data",
+        frameworkUrl: buildUrl + "/ChainsafeDemoBuild.framework.js",
+        codeUrl: buildUrl + "/ChainsafeDemoBuild.wasm",
         streamingAssetsUrl: "StreamingAssets",
         companyName: "ChainSafe",
         productName: "ChainSafeDemo",
@@ -86,7 +86,7 @@
         canvas.style.width = "960px";
         canvas.style.height = "600px";
       }
-      canvas.style.background = "url('" + buildUrl + "/ChainsafeDemoBuild.jpg.unityweb') center / cover";
+      canvas.style.background = "url('" + buildUrl + "/ChainsafeDemoBuild.jpg') center / cover";
       loadingBar.style.display = "block";
 
       var script = document.createElement("script");
