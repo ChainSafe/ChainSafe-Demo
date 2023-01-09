@@ -4,10 +4,11 @@ document.body.appendChild(Object.assign(document.createElement("script"), { type
 document.body.appendChild(Object.assign(document.createElement("script"), { type: "text/javascript", src: "./web3/lib/web3modal.js" }));
 // load web3js to create transactions
 document.body.appendChild(Object.assign(document.createElement("script"), { type: "text/javascript", src: "./web3/lib/web3.min.js" }));
+
 // uncomment to enable torus wallet
 // document.body.appendChild(Object.assign(document.createElement("script"), { type: "text/javascript", src: "https://unpkg.com/@toruslabs/torus-embed" }));
 // uncomment to enable walletconnect
-// document.body.appendChild(Object.assign(document.createElement("script"), { type: "text/javascript", src: "https://unpkg.com/@walletconnect/web3-provider@1.2.1/dist/umd/index.min.js" }));
+document.body.appendChild(Object.assign(document.createElement("script"), { type: "text/javascript", src: "https://unpkg.com/@walletconnect/web3-provider@1.2.1/dist/umd/index.min.js" }));
 
 // load web3gl to connect to unity
 window.web3gl = {
@@ -23,6 +24,8 @@ window.web3gl = {
     sendTransactionResponse: "",
     sha3Message,
     hashMessageResponse: "",
+    ecRecover,
+    ecRecoverAddressResponse:"",
     sendTransactionResponse: "",
     sendTransactionData,
     sendTransactionResponseData:"",
@@ -44,12 +47,12 @@ async function connect() {
     // torus: {
     //   package: Torus,
     // },
-    // walletconnect: {
-    //   package: window.WalletConnectProvider.default,
-    //   options: {
-    //     infuraId: "00000000000000000000000000000000",
-    //   },
-    // },
+   //  walletconnect: {
+   //    package: window.WalletConnectProvider.default,
+   //    options: {
+   //      infuraId: "00000000000000000000000000000000",
+   //    },
+   //  },
   };
 
   const web3Modal = new window.Web3Modal.default({
@@ -93,10 +96,8 @@ async function connect() {
     web3gl.networkId = parseInt(chainId);
   });
 }
-
 /*
-Will calculate the sha3 of the input.
-window.web3gl.sha3Message("hello")
+    Will calculate the sha3 of the input.
 */
 async function sha3Message(message) {
     try {
@@ -108,13 +109,27 @@ async function sha3Message(message) {
 }
 
 /*
+    Will recover the address of signer
+*/
+async function ecRecover(message,signature) {
+    try {
+        const recoverAddress = await web3.eth.accounts.recover(message, signature);
+        window.web3gl.ecRecoverAddressResponse = recoverAddress;
+    } catch (error) {
+        window.web3gl.ecRecoverAddressResponse = error.message;
+    }
+}
+
+
+/*
 paste this in inspector to connect to sign message:
 window.web3gl.signMessage("hello")
 */
 async function signMessage(message) {
   try {
     const from = (await web3.eth.getAccounts())[0];
-    const signature = await web3.eth.personal.sign(message, from, "")
+    const signature = await web3.eth.personal.sign(message, from, "");
+        console.log(signature);
       window.web3gl.signMessageResponse = signature;
   } catch (error) {
     window.web3gl.signMessageResponse = error.message;
